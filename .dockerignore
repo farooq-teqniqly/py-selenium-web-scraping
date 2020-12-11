@@ -1,0 +1,16 @@
+**/.dockerignore
+**/.env
+**/.git
+**/.gitignore
+**/.idea
+**/docker-compose*
+**/Dockerfile*
+**/debug.log
+**/LICENSE
+**/README.md
+**/venv
+
+# Custom files
+.env.example
+**/*.ps1
+**/chromedriver.exe
