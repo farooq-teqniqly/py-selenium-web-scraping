@@ -7,10 +7,24 @@ from ProcessPageJob import ProcessPageJob
 load_dotenv()
 
 
-def main(first_time_run: bool):
-    db = sqlite3.connect("wine-ratings.db")
+def main():
+    root_ratings_url = "https://www.winemag.com/buying-guide/"
+    create_db_table_str = os.getenv("CREATE_DB_TABLE")
+    db_start_page_str = os.getenv("DB_START_PAGE")
+    sleep_time_str = os.getenv("SLEEP_TIME")
 
-    if first_time_run:
+    create_db_table = 0
+    db_start_page = 1
+    sleep_time = 2
+
+    driver = WebDriverFactory.create_driver()
+    db = sqlite3.connect("wine-ratings.db")
+    job = ProcessPageJob("https://www.winemag.com/region/us", driver, db)
+
+    if create_db_table_str:
+        create_db_table = int(create_db_table_str)
+
+    if create_db_table == 1:
         db.execute(
             """create table reviews (
             seq_no integer primary key autoincrement, 
@@ -18,16 +32,6 @@ def main(first_time_run: bool):
             url text not null,
             sha text not null)"""
         )
-
-    driver = WebDriverFactory.create_driver()
-    job = ProcessPageJob("https://www.winemag.com/region/us", driver, db)
-
-    root_ratings_url = "https://www.winemag.com/buying-guide/"
-    db_start_page_str = os.getenv("DB_START_PAGE")
-    sleep_time_str = os.getenv("SLEEP_TIME")
-
-    db_start_page = 1
-    sleep_time = 2
 
     if db_start_page_str:
         db_start_page = int(db_start_page_str)
@@ -39,4 +43,4 @@ def main(first_time_run: bool):
 
 
 if __name__ == "__main__":
-    main(False)
+    main()
