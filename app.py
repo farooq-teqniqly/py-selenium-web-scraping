@@ -23,8 +23,18 @@ def main(first_time_run: bool):
     job = ProcessPageJob("https://www.winemag.com/region/us", driver, db)
 
     root_ratings_url = "https://www.winemag.com/buying-guide/"
-    db_start_page = int(os.getenv("DB_START_PAGE"))
-    sleep_time = int(os.getenv("SLEEP_TIME"))
+    db_start_page_str = os.getenv("DB_START_PAGE")
+    sleep_time_str = os.getenv("SLEEP_TIME")
+
+    db_start_page = 1
+    sleep_time = 2
+
+    if db_start_page_str:
+        db_start_page = int(db_start_page_str)
+
+    if sleep_time_str:
+        sleep_time = int(sleep_time_str)
+
     job.run(db_start_page, root_ratings_url, sleep_time)
 
 

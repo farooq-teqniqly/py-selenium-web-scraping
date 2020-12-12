@@ -15,12 +15,13 @@ class ProcessPageJob:
     def run(self, db_start_page: int, root_ratings_url: str, sleep_time: int):
 
         current_page_num = 1
+        current_sleep_time = sleep_time
 
         while True:
             print(f"Current url: {self.driver.current_url}")
 
             if current_page_num >= db_start_page:
-                sleep_time = sleep_time * 2.5
+                current_sleep_time = sleep_time * 2.5
                 review_links = self._get_review_links()
                 print(f"Found {len(review_links)} reviews.")
 
@@ -50,7 +51,7 @@ class ProcessPageJob:
             print(f"Going to next page: {next_page_link.text}...")
             next_page_link = self._get_next_page_link()
             current_page_num = int(next_page_link.text)
-            time.sleep(sleep_time)
+            time.sleep(current_sleep_time)
 
     def _read_page(self, link):
         if not link:
